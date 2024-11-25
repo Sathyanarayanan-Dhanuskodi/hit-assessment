@@ -33,7 +33,7 @@ function EditUser() {
           password: '', // Don't set password for security
           role: response.data.roleId
         });
-      } catch (err: any) {
+      } catch {
         setError('Failed to fetch user details');
       }
     }
@@ -58,6 +58,7 @@ function EditUser() {
       });
 
       router.push('/users');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.log('Error updating user', err);
       setError(err.response?.data?.message || 'Failed to update user');

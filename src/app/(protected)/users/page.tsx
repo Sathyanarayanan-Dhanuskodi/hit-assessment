@@ -5,10 +5,8 @@ import { IUserResponse, TUser } from '@/types/users';
 import Utils from '@/utils/utils';
 import Link from 'next/link';
 import { useSession } from '@/app/context/SessionProvider';
-import { useRouter } from 'next/navigation';
 
 function Users() {
-  const router = useRouter();
   const [users, setUsers] = useState<TUser[]>([]);
   const [selecteduser, setSelectedUser] = useState<TUser>();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);

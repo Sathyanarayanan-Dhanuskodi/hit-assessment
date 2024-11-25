@@ -1,8 +1,7 @@
 import { ACCESS_TOKEN_KEY } from '@/constants/constants';
-import { IUser, TRole, TTokenPayload } from '@/types/users';
+import { IUser, TTokenPayload } from '@/types/users';
 import axios from 'axios';
 import { decodeJwt, SignJWT } from 'jose';
-import { unstable_cache } from 'next/cache';
 
 export default class Utils {
   static async callRestAPI({
