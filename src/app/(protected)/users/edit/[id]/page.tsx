@@ -114,7 +114,7 @@ function EditUser() {
           <div className="mt-8 flex gap-x-2">
             <button
               type="button"
-              className="w-full py-3 px-4 text-sm tracking-wide rounded-lg border hover:bg-gray-200 focus:outline-none"
+              className="w-full py-3 px-4 text-sm tracking-wide rounded-lg border bg-gray-300 hover:bg-gray-400 focus:outline-none"
               onClick={router.back}>
               Back
             </button>

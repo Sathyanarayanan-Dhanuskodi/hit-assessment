@@ -91,7 +91,13 @@ function AddUser() {
 
           <p className="text-red-500 text-sm">{error}</p>
 
-          <div className="!mt-8">
+          <div className="!mt-8 flex gap-x-2">
+            <button
+              type="button"
+              className="w-full py-3 px-4 text-sm tracking-wide rounded-lg border bg-gray-300 hover:bg-gray-400 focus:outline-none"
+              onClick={router.back}>
+              Back
+            </button>
             <button
               type="button"
               className="w-full py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none disabled:bg-gray-400"
