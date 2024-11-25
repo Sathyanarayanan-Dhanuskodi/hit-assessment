@@ -5,6 +5,7 @@ import { IUserResponse, TUser } from '@/types/users';
 import Utils from '@/utils/utils';
 import Link from 'next/link';
 import { useSession } from '@/app/context/SessionProvider';
+import Loader from '@/components/Loader';
 
 function Users() {
   const [users, setUsers] = useState<TUser[]>([]);
@@ -38,7 +39,7 @@ function Users() {
     fetchUsers();
   }, [selecteduser]);
 
-  return (
+  return !isLoading ? (
     <>
       {isDeleteModalOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
@@ -126,6 +127,8 @@ function Users() {
         </table>
       </div>
     </>
+  ) : (
+    <Loader />
   );
 }
 
