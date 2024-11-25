@@ -11,6 +11,13 @@ export async function POST(request: Request) {
   try {
     const { username, password, roleId } = await request.json();
 
+    if (!username || !password || !roleId) {
+      return Response.json(
+        { success: false, message: 'Enter all the fields' },
+        { status: 400 }
+      );
+    }
+
     const availableUser = await prisma.user.findUnique({
       where: {
         username

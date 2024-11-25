@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Utils from '@/utils/utils';
+import Link from 'next/link';
 
 function Signup() {
   const router = useRouter();
@@ -30,7 +31,6 @@ function Signup() {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      console.error(err);
       setError(err.response.data.message);
     } finally {
       setIsLoading(false);
@@ -86,6 +86,13 @@ function Signup() {
                 </button>
               </div>
             </form>
+            <p className="text-gray-800 text-sm !mt-8 text-center">
+              <Link
+                href="/signin"
+                className="text-blue-600 hover:underline ml-1 whitespace-nowrap font-semibold">
+                Sign in
+              </Link>
+            </p>
           </div>
         </div>
       </div>

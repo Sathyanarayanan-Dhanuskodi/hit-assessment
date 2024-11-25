@@ -26,6 +26,13 @@ export async function PUT(
 
   const { username, password, roleId } = await req.json();
 
+  if (!username || !roleId) {
+    return Response.json(
+      { success: false, message: 'Enter all the fields' },
+      { status: 400 }
+    );
+  }
+
   const user = await prisma.user.findUnique({
     where: {
       id: parseInt(id)
