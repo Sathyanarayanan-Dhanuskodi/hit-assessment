@@ -26,7 +26,7 @@ function Signup() {
         }
       });
 
-      router.push('/');
+      router.push('/users');
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
