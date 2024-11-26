@@ -1,11 +1,13 @@
-# Role-Based Access Control (RBAC) Application
+# Role-Based Access Control (RBAC) Application in Next.js
 
 ## Interview prompt document is attached [here](https://github.com/Sathyanarayanan-Dhanuskodi/hit-assessment/blob/main/docs/Interview%20Prompt.docx)
 
 ## Prerequisites
 
-- nvm
-- git
+Before you begin, make sure you have the following tools installed:
+
+- **nvm** (Node Version Manager)
+- **git**
 
 ## Tech Stack
 
@@ -20,87 +22,40 @@
 Clone the project
 
 ```bash
-  git clone https://github.com/Sathyanarayanan-Dhanuskodi/hit-assessment
+git clone https://github.com/Sathyanarayanan-Dhanuskodi/hit-assessment
 ```
 
 Go to the project directory
 
 ```bash
-  cd hit-assessment
+cd hit-assessment
 ```
 
 Create `.env` file (Refer `.env.example` for reference) or run
 
 ```bash
-  cp .env.example .env
+cp .env.example .env
 ```
 
 Switch the node version
 
 ```bash
-  nvm use
+nvm use
 ```
 
 Install dependencies
 
 ```bash
-  npm i
+npm i
 ```
 
 Start the server in development mode
 
 ```bash
-  npm run dev
+npm run dev
 ```
 
 Application will now run in `http://localhost:3000`
-
-## Deployment
-
-To deploy this project in production
-
-- Set `NODE_ENV=production`
-- Run `npm ci --production` to install the dependencies
-- Run `npm run build` to build the project
-- Run `npm run start`
-
-## Features
-
-This application demonstrates **Role-Based Access Control (RBAC)** in Next.js
-
-### Roles
-
-The application supports four distinct roles:
-
-- **Admin**: Full access to all features and settings
-- **HR**
-- **HR Manager**
-- **Finance Manager**
-
-### Modules
-
-The application is organized into three key modules:
-
-- **Employees**: Manage employee data
-- **Finance Management**: Placeholder tab to showcase RBAC
-- **Access Management**: Control and configure user roles and permissions
-
-### Permission Levels
-
-Each role has varying levels of access with four defined permission types:
-
-- **Read**: View data
-- **Create**: Add new data
-- **Edit**: Modify existing data
-- **Delete**: Remove data
-
-### Access Control
-
-All permissions and access settings for roles (except Admin) can be managed and customized under the **Access Management** tab.
-
-### User Access
-
-Users will be able to access and utilize the application's features based on the permissions granted to their specific role.
 
 ## Getting Started
 
@@ -184,3 +139,64 @@ Here is an overview of the application's main sections and features:
 ### 5. **Sign Out**
 
 - Use this option to sign out of the application.
+
+## Features
+
+This application demonstrates **Role-Based Access Control (RBAC)** in Next.js
+
+### Roles
+
+The application supports four distinct roles:
+
+- **Admin**: Full access to all features and settings
+- **HR**
+- **HR Manager**
+- **Finance Manager**
+
+### Modules
+
+The application is organized into three key modules:
+
+- **Employees**: Manage employee data
+- **Finance Management**: Placeholder tab to showcase RBAC
+- **Access Management**: Control and configure user roles and permissions
+
+### Permission Levels
+
+Each role has varying levels of access with four defined permission types:
+
+- **Read**: View data
+- **Create**: Add new data
+- **Edit**: Modify existing data
+- **Delete**: Remove data
+
+### Access Control
+
+All permissions and access settings for roles (except Admin) can be managed and customized under the **Access Management** tab.
+
+### User Access
+
+Users will be able to access and utilize the application's features based on the permissions granted to their specific role.
+
+## Deployment
+
+To deploy the project in a production environment:
+
+1. Set `NODE_ENV=production`
+2. Install production dependencies by running:
+
+```bash
+npm ci --production
+```
+
+3. Build the project:
+
+```bash
+npm run build
+```
+
+4. Start the application in production mode:
+
+```bash
+npm run start
+```
