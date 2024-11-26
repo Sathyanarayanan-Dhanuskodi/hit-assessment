@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import Loader from '@/components/Loader';
 import { useMasterData } from '@/context/MasterDataProvider';
 import Utils from '@/utils/utils';
-import { EPermissions, ERoles } from '@/types/types';
+import { ERoles } from '@/types/types';
 
 function Access() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
