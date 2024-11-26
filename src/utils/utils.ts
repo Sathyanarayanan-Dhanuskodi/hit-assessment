@@ -1,5 +1,4 @@
 import { ACCESS_TOKEN_KEY } from '@/constants/constants';
-import { EModules, EPermissions } from '@/types/types';
 import { IUser, TTokenPayload } from '@/types/users';
 import axios from 'axios';
 import { decodeJwt, SignJWT } from 'jose';

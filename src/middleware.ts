@@ -5,16 +5,6 @@ import { TTokenPayload } from './types/users';
 import Utils from './utils/utils';
 import { TMasterData } from './types/types';
 
-function matchesPattern(pattern: string, path: string): boolean {
-  // Convert wildcard pattern to regex
-  const regexPattern = pattern
-    .replace(/\//g, '\\/') // Escape forward slashes
-    .replace(/\*/g, '.*'); // Convert * to .*
-
-  const regex = new RegExp(`^${regexPattern}$`);
-  return regex.test(path);
-}
-
 function checkEndpointAccess(path: string, masterData: TMasterData) {
   const rbac = new RBAC(masterData);
 

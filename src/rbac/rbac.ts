@@ -11,26 +11,26 @@ export default class RBAC {
     const isEditUrl = url.includes('/edit');
     const isAddUrl = url.includes('/add');
 
-    let module: number = 0;
+    let moduleId: number = 0;
 
     switch (true) {
       case url.startsWith('/employees'):
-        module = EModules.EMPLOYEES;
+        moduleId = EModules.EMPLOYEES;
         break;
       case url.startsWith('/access'):
-        module = EModules.ACCESS_MANAGEMENT;
+        moduleId = EModules.ACCESS_MANAGEMENT;
         break;
       case url.startsWith('/finance'):
-        module = EModules.FINANCE_MANAGEMENT;
+        moduleId = EModules.FINANCE_MANAGEMENT;
         break;
     }
 
-    if (!module) {
+    if (!moduleId) {
       return true;
     }
 
     return this.data.currentUserPermissions
-      ?.find((e) => e.moduleId === module)
+      ?.find((e) => e.moduleId === moduleId)
       ?.permissions.some((p) => {
         if (isAddUrl) {
           return p.name.toLowerCase() === EPermissions.CREATE.toLowerCase();
