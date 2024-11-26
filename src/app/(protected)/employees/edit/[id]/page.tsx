@@ -2,10 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 import Utils from '@/utils/utils';
 import Roles from '@/components/Roles';
 import { TRole } from '@/types/users';
 import Loader from '@/components/Loader';
+import { EMPLOYEES_URL } from '@/constants/api';
+import Input from '@/components/Input';
 
 function EditUser() {
   const router = useRouter();
@@ -13,11 +16,9 @@ function EditUser() {
 
   const [user, setUser] = useState<{
     username: string;
-    password: string;
     roles: number[];
   }>({
     username: '',
-    password: '',
     roles: []
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -27,12 +28,11 @@ function EditUser() {
     async function fetchUser() {
       try {
         const response = await Utils.callRestAPI({
-          url: `/api/employees/${id}`
+          url: `${EMPLOYEES_URL}/${id}`
         });
 
         setUser({
           username: response.data.username,
-          password: '', // Don't set password for security
           roles: response.data.roles?.map((e: TRole) => e.id)
         });
       } catch {
@@ -54,17 +54,16 @@ function EditUser() {
         roles: user.roles
       };
 
-      if (user.password) {
-        payload['password'] = user.password;
-      }
-
       await Utils.callRestAPI({
-        url: `/api/employees/${id}`,
+        url: `${EMPLOYEES_URL}/${id}`,
         method: 'PUT',
         data: payload
       });
 
       router.push('/employees');
+
+      toast.success('Employee updated successfully');
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.log('Error updating user', err);
@@ -81,12 +80,11 @@ function EditUser() {
         <form className="min-w-[400px] mt-8 space-y-4">
           <p className="text-gray-800 text-sm mb-2 block">Username</p>
           <div className="relative flex items-center">
-            <input
+            <Input
               name="username"
               type="text"
               required
               value={user.username}
-              className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600"
               placeholder="Enter username"
               onChange={(e) => setUser({ ...user, username: e.target.value })}
             />
@@ -94,12 +92,12 @@ function EditUser() {
 
           <p className="text-gray-800 text-sm mb-2 block">Password</p>
           <div className="relative flex items-center">
-            <input
+            <Input
               name="password"
               type="password"
-              className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600"
               placeholder="Enter new password"
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              readOnly
+              required
             />
           </div>
 

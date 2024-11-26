@@ -1,8 +1,8 @@
 'use client';
 
+import { createContext, useContext, useEffect, useState } from 'react';
 import { IUser } from '@/types/users';
 import Utils from '@/utils/utils';
-import { createContext, useContext, useEffect, useState } from 'react';
 
 const SessionContext = createContext<IUser | undefined>(undefined);
 

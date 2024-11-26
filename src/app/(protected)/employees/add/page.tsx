@@ -1,9 +1,12 @@
 'use client';
 
-import Roles from '@/components/Roles';
-import Utils from '@/utils/utils';
-import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Roles from '@/components/Roles';
+import { toast } from 'react-toastify';
+import Utils from '@/utils/utils';
+import { EMPLOYEES_URL } from '@/constants/api';
+import Input from '@/components/Input';
 
 function AddUser() {
   const router = useRouter();
@@ -25,7 +28,7 @@ function AddUser() {
 
     try {
       await Utils.callRestAPI({
-        url: '/api/employees',
+        url: EMPLOYEES_URL,
         method: 'POST',
         data: {
           username: user.username,
@@ -35,6 +38,8 @@ function AddUser() {
       });
 
       router.push('/employees');
+
+      toast.success('Employee added successfully');
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -52,11 +57,10 @@ function AddUser() {
         <form className="min-w-[400px] mt-8 space-y-4">
           <p className="text-gray-800 text-sm mb-2 block">Username</p>
           <div className="relative flex items-center">
-            <input
+            <Input
               name="username"
               type="text"
               required
-              className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600"
               placeholder="Enter username"
               onChange={(e) => setUser({ ...user, username: e.target.value })}
             />
@@ -64,11 +68,10 @@ function AddUser() {
 
           <p className="text-gray-800 text-sm mb-2 block">Password</p>
           <div className="relative flex items-center">
-            <input
+            <Input
               name="password"
               type="password"
               required
-              className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600"
               placeholder="Enter password"
               onChange={(e) => setUser({ ...user, password: e.target.value })}
             />

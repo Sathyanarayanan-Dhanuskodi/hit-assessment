@@ -2,8 +2,11 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Utils from '@/utils/utils';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
+import Utils from '@/utils/utils';
+import { ADMIN_SIGN_UP_URL } from '@/constants/api';
+import Input from '@/components/Input';
 
 function Signup() {
   const router = useRouter();
@@ -18,7 +21,7 @@ function Signup() {
 
     try {
       await Utils.callRestAPI({
-        url: '/api/admins/signup',
+        url: ADMIN_SIGN_UP_URL,
         method: 'POST',
         data: {
           username,
@@ -28,6 +31,8 @@ function Signup() {
       });
 
       router.push('/');
+
+      toast.success('Signup success');
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -46,29 +51,23 @@ function Signup() {
               Admin Signup
             </h2>
             <form className="mt-8 space-y-4">
-              <label className="text-gray-800 text-sm mb-2 block">
-                Username
-              </label>
+              <p className="text-gray-800 text-sm mb-2 block">Username</p>
               <div className="relative flex items-center">
-                <input
+                <Input
                   name="username"
                   type="text"
                   required
-                  className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600"
                   placeholder="Enter user name"
                   onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
 
-              <label className="text-gray-800 text-sm mb-2 block">
-                Password
-              </label>
+              <p className="text-gray-800 text-sm mb-2 block">Password</p>
               <div className="relative flex items-center">
-                <input
+                <Input
                   name="password"
                   type="password"
                   required
-                  className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600"
                   placeholder="Enter password"
                   onChange={(e) => setPassword(e.target.value)}
                 />

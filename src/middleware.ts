@@ -4,6 +4,7 @@ import RBAC from './rbac/rbac';
 import { TTokenPayload } from './types/users';
 import Utils from './utils/utils';
 import { TMasterData } from './types/types';
+import { MASTER_DATA_URL, NOT_AUTH_URL } from './constants/api';
 
 function checkEndpointAccess(path: string, masterData: TMasterData) {
   const rbac = new RBAC(masterData);
@@ -22,7 +23,7 @@ export async function middleware(req: NextRequest) {
       req.nextUrl.pathname.includes(path)
     )
   ) {
-    return Response.redirect(new URL('/api/notAuth', req.url));
+    return Response.redirect(new URL(NOT_AUTH_URL, req.url));
   }
 
   if (!['/signin', '/signup'].includes(req.nextUrl.pathname) && !token) {
@@ -44,7 +45,7 @@ export async function middleware(req: NextRequest) {
     const roles = rid as TTokenPayload['rid'];
 
     const masterData = await Utils.callRestAPI({
-      url: `${process.env.BASE_URL}/api/master-data?roles=${roles.join(',')}`,
+      url: `${process.env.BASE_URL}${MASTER_DATA_URL}?roles=${roles.join(',')}`,
       headers: {
         cache: 'force-cache'
       }

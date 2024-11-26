@@ -7,6 +7,7 @@ import { NAV_LINKS } from '@/config/navigation';
 import Utils from '@/utils/utils';
 import { useSession } from '@/context/SessionProvider';
 import { useMasterData } from '@/context/MasterDataProvider';
+import { SIGN_OUT_URL } from '@/constants/api';
 
 function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -24,9 +25,9 @@ function Layout({ children }: { children: React.ReactNode }) {
           <ul className="space-y-1">
             {NAV_LINKS.map((e) => {
               const isNavLinkAllowed =
-                masterData?.data?.currentUserPermissions?.some(
+                masterData?.data?.currentUserPermissions?.find(
                   (p) => p.module.name === e.title
-                );
+                )?.permissions.length;
 
               if (isNavLinkAllowed) {
                 return (
@@ -86,7 +87,7 @@ function NavLink({
 
 async function signOut() {
   await Utils.callRestAPI({
-    url: '/api/signout'
+    url: SIGN_OUT_URL
   });
   window.location.href = '/signin';
 }

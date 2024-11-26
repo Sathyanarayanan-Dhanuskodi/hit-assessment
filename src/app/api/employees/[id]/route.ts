@@ -58,6 +58,7 @@ export async function PUT(
     select: {
       id: true,
       username: true,
+      password: true,
       roles: {
         select: {
           id: true
@@ -73,10 +74,6 @@ export async function PUT(
     );
   }
 
-  const body: { [key: string]: string | number } = { username };
-
-  if (password) body['password'] = password;
-
   const rolesToConnect = roles.map((role: number) => ({ id: role }));
   const rolesToDisconnect = user.roles
     .filter((role) => !roles.includes(role.id))
@@ -87,7 +84,8 @@ export async function PUT(
       id: parseInt(id)
     },
     data: {
-      ...body,
+      username,
+      password: user.password,
       roles: {
         connect: rolesToConnect,
         disconnect: rolesToDisconnect

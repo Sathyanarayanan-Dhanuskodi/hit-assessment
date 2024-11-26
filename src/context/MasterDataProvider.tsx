@@ -1,9 +1,10 @@
 'use client';
 
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { IRoleModulePermission, TMasterData } from '@/types/types';
 import Utils from '@/utils/utils';
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useSession } from './SessionProvider';
+import { ACCESS_URL, MASTER_DATA_URL } from '@/constants/api';
 
 const MasterDataContext = createContext<
   | {
@@ -29,7 +30,7 @@ export function MasterDataProvider({
     if (currentUser) {
       (async () => {
         const masterData = await Utils.callRestAPI({
-          url: `/api/master-data?roles=${currentUser.rid.join(',')}`,
+          url: `${MASTER_DATA_URL}?roles=${currentUser.rid.join(',')}`,
           headers: {
             cache: 'force-cache'
           }
@@ -40,7 +41,7 @@ export function MasterDataProvider({
 
       (async () => {
         const allAccess = await Utils.callRestAPI({
-          url: '/api/access',
+          url: ACCESS_URL,
           headers: {
             cache: 'force-cache'
           }

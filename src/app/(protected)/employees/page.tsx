@@ -8,6 +8,7 @@ import Loader from '@/components/Loader';
 import { useMasterData } from '@/context/MasterDataProvider';
 import { EPermissions } from '@/types/types';
 import { useSession } from '@/context/SessionProvider';
+import { EMPLOYEES_URL } from '@/constants/api';
 
 function Users() {
   const [users, setUsers] = useState<TUser[]>([]);
@@ -19,7 +20,7 @@ function Users() {
 
   async function fetchUsers() {
     const usersData: IUserResponse = await Utils.callRestAPI({
-      url: '/api/employees'
+      url: EMPLOYEES_URL
     });
 
     setUsers(usersData.data);
@@ -34,7 +35,7 @@ function Users() {
   const deleteUser = useCallback(async () => {
     setIsLoading(true);
     await Utils.callRestAPI({
-      url: `/api/employees/${selectedUser?.id}`,
+      url: `${EMPLOYEES_URL}/${selectedUser?.id}`,
       method: 'DELETE'
     });
     setIsLoading(false);

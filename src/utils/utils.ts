@@ -1,7 +1,8 @@
-import { ACCESS_TOKEN_KEY } from '@/constants/constants';
-import { IUser, TTokenPayload } from '@/types/users';
 import axios from 'axios';
 import { decodeJwt, SignJWT } from 'jose';
+import { ROLES_URL } from '@/constants/api';
+import { ACCESS_TOKEN_KEY } from '@/constants/constants';
+import { IUser, TTokenPayload } from '@/types/users';
 
 export default class Utils {
   static async callRestAPI({
@@ -52,7 +53,7 @@ export default class Utils {
       let decodedToken: IUser = decodeJwt(token);
 
       const role = await Utils.callRestAPI({
-        url: `/api/roles/${decodedToken.rid}`,
+        url: `${ROLES_URL}/${decodedToken.rid}`,
         headers: {
           cache: 'force-cache'
         }

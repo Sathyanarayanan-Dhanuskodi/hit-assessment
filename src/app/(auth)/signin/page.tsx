@@ -1,9 +1,12 @@
 'use client';
 
-import Utils from '@/utils/utils';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { toast } from 'react-toastify';
+import Utils from '@/utils/utils';
+import { SIGN_IN_URL } from '@/constants/api';
+import Input from '@/components/Input';
 
 export default function Signin() {
   const router = useRouter();
@@ -21,7 +24,7 @@ export default function Signin() {
 
     try {
       await Utils.callRestAPI({
-        url: '/api/signin',
+        url: SIGN_IN_URL,
         method: 'POST',
         data: {
           username: user.username,
@@ -29,9 +32,9 @@ export default function Signin() {
         }
       });
 
-      setTimeout(() => {
-        router.push('/');
-      }, 1000);
+      router.push('/');
+
+      toast.success('Signin success');
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -51,15 +54,12 @@ export default function Signin() {
               Sign in
             </h2>
             <form className="mt-8 space-y-4">
-              <label className="text-gray-800 text-sm mb-2 block">
-                Username
-              </label>
+              <p className="text-gray-800 text-sm mb-2 block">Username</p>
               <div className="relative flex items-center">
-                <input
-                  name="username"
+                <Input
                   type="text"
+                  name="username"
                   required
-                  className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600"
                   placeholder="Enter username"
                   onChange={(e) =>
                     setUser({ ...user, username: e.target.value })
@@ -67,15 +67,12 @@ export default function Signin() {
                 />
               </div>
 
-              <label className="text-gray-800 text-sm mb-2 block">
-                Password
-              </label>
+              <p className="text-gray-800 text-sm mb-2 block">Password</p>
               <div className="relative flex items-center">
-                <input
+                <Input
                   name="password"
                   type={isPasswordOpen ? 'text' : 'password'}
                   required
-                  className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600"
                   placeholder="Enter password"
                   onChange={(e) =>
                     setUser({ ...user, password: e.target.value })

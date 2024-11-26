@@ -1,24 +1,5 @@
 import Image from 'next/image';
 
-// Admin
-// Employee management
-// RBAC management
-// Finance Management
-
-// HR Manager
-// Employee Edit
-
-// Finace Manage
-// Finace Management
-
-// HR
-// Employee - (View)
-
-// Sathya - Admin
-// Gopi - HR Manager
-// Venkat - Finace manager
-// Senhthil - HR Manager, Finance Manager
-
 export const NAV_LINKS = [
   {
     title: 'Employees',
@@ -26,7 +7,6 @@ export const NAV_LINKS = [
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        // fill="currentColor"
         className="w-[18px] h-[18px] mr-4"
         viewBox="0 0 512 512">
         <path
