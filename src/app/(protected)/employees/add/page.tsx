@@ -1,6 +1,6 @@
 'use client';
 
-import { ROLES } from '@/constants/constants';
+import Roles from '@/components/Roles';
 import Utils from '@/utils/utils';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -11,11 +11,11 @@ function AddUser() {
   const [user, setUser] = useState<{
     username: string;
     password: string;
-    role: number;
+    roles: number[];
   }>({
     username: '',
     password: '',
-    role: 1
+    roles: []
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -25,16 +25,16 @@ function AddUser() {
 
     try {
       await Utils.callRestAPI({
-        url: '/api/users',
+        url: '/api/employees',
         method: 'POST',
         data: {
           username: user.username,
           password: user.password,
-          roleId: user.role
+          roles: user.roles
         }
       });
 
-      router.push('/users');
+      router.push('/employees');
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -50,7 +50,7 @@ function AddUser() {
       <strong>Add user</strong>
       <div className="flex justify-center w-full">
         <form className="min-w-[400px] mt-8 space-y-4">
-          <label className="text-gray-800 text-sm mb-2 block">Username</label>
+          <p className="text-gray-800 text-sm mb-2 block">Username</p>
           <div className="relative flex items-center">
             <input
               name="username"
@@ -62,7 +62,7 @@ function AddUser() {
             />
           </div>
 
-          <label className="text-gray-800 text-sm mb-2 block">Password</label>
+          <p className="text-gray-800 text-sm mb-2 block">Password</p>
           <div className="relative flex items-center">
             <input
               name="password"
@@ -74,20 +74,15 @@ function AddUser() {
             />
           </div>
 
-          <label className="text-gray-800 text-sm mb-2 block">Role</label>
-          <div className="relative flex items-center">
-            <select
-              defaultValue={ROLES.ADMIN}
-              onChange={(e) =>
-                setUser({ ...user, role: parseInt(e.target.value) })
-              }>
-              <option value={ROLES.ADMIN} defaultChecked>
-                Admin
-              </option>
-              <option value={ROLES.EDITOR}>Editor</option>
-              <option value={ROLES.VIEWER}>Viewer</option>
-            </select>
-          </div>
+          <p className="text-gray-800 text-sm mb-2 block">Roles</p>
+          <Roles
+            onChange={(e) =>
+              setUser({
+                ...user,
+                roles: [...user.roles, parseInt(e.target.value)]
+              })
+            }
+          />
 
           <p className="text-red-500 text-sm">{error}</p>
 

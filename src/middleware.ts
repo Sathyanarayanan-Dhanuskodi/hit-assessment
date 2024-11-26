@@ -1,6 +1,9 @@
 import { decodeJwt, jwtVerify } from 'jose';
 import type { NextRequest } from 'next/server';
-import { RBAC } from './rbac/rbac';
+import RBAC from './rbac/rbac';
+import { TTokenPayload } from './types/users';
+import Utils from './utils/utils';
+import { TMasterData } from './types/types';
 
 function matchesPattern(pattern: string, path: string): boolean {
   // Convert wildcard pattern to regex
@@ -12,8 +15,25 @@ function matchesPattern(pattern: string, path: string): boolean {
   return regex.test(path);
 }
 
+function checkEndpointAccess(path: string, masterData: TMasterData) {
+  const rbac = new RBAC(masterData);
+
+  const hasAccess = rbac.checkEndpointPermission(path);
+
+  return hasAccess;
+}
+
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get(process.env.ACCESS_TOKEN_KEY ?? '');
+
+  if (
+    req.nextUrl.pathname.startsWith('/api') &&
+    !['signup', 'signin', 'health', 'notAuth'].some((path) =>
+      req.nextUrl.pathname.includes(path)
+    )
+  ) {
+    return Response.redirect(new URL('/api/notAuth', req.url));
+  }
 
   if (!['/signin', '/signup'].includes(req.nextUrl.pathname) && !token) {
     return Response.redirect(new URL('/signin', req.url));
@@ -31,12 +51,21 @@ export async function middleware(req: NextRequest) {
   if (token) {
     const rid = decodeJwt(token?.value ?? '').rid;
 
-    const hasAccess = RBAC[rid as number].some(
-      (e) =>
-        e === 'ALL' ||
-        e === req.nextUrl.pathname ||
-        matchesPattern(e, req.nextUrl.pathname)
+    const roles = rid as TTokenPayload['rid'];
+
+    const masterData = await Utils.callRestAPI({
+      url: `${process.env.BASE_URL}/api/master-data?roles=${roles.join(',')}`,
+      headers: {
+        cache: 'force-cache'
+      }
+    });
+
+    const hasAccess = checkEndpointAccess(
+      req.nextUrl.pathname,
+      masterData.data
     );
+
+    console.log('hasAccess', hasAccess);
 
     if (
       !req.nextUrl.pathname.startsWith('/notAuth') &&

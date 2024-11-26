@@ -4,17 +4,18 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { NAV_LINKS } from '@/config/navigation';
-import { RBAC } from '@/rbac/rbac';
 import Utils from '@/utils/utils';
-import { useSession } from '@/app/context/SessionProvider';
+import { useSession } from '@/context/SessionProvider';
+import { useMasterData } from '@/context/MasterDataProvider';
 
 function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const currentUser = useSession();
+  const masterData = useMasterData();
 
   return currentUser ? (
     <section className="w-full h-screen flex flex-row">
-      <nav className="bg-[#f7f7f8] h-screen min-w-[200px] py-6 px-4">
+      <nav className="bg-[#f7f7f8] h-screen min-w-[250px] py-6 px-4">
         <div className="relative">
           <strong>HIT Assessment</strong>
         </div>
@@ -22,10 +23,12 @@ function Layout({ children }: { children: React.ReactNode }) {
         <div className="overflow-auto py-6 h-full mt-4">
           <ul className="space-y-1">
             {NAV_LINKS.map((e) => {
-              if (
-                RBAC[currentUser.rid].includes('ALL') ||
-                RBAC[currentUser.rid].includes(e.link)
-              ) {
+              const isNavLinkAllowed =
+                masterData?.data?.currentUserPermissions?.some(
+                  (p) => p.module.name === e.title
+                );
+
+              if (isNavLinkAllowed) {
                 return (
                   <Link key={e.link} href={e.link}>
                     <NavLink
@@ -67,11 +70,11 @@ function NavLink({
   title,
   icon,
   className
-}: {
+}: Readonly<{
   title: string;
   icon: React.ReactNode;
   className?: string;
-}) {
+}>) {
   return (
     <li
       className={`text-black cursor-pointer hover:text-blue-600 text-[15px] flex items-center hover:bg-white rounded px-4 py-3 transition-all ${className}`}>

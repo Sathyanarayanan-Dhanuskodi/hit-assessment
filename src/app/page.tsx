@@ -1,11 +1,17 @@
-import Layout from '@/components/Layout';
 import React from 'react';
+import Layout from '@/components/Layout';
+import { MasterDataProvider } from '@/context/MasterDataProvider';
+import { SessionProvider } from '@/context/SessionProvider';
 
 function Home() {
   return (
-    <Layout>
-      <strong>Home</strong>
-    </Layout>
+    <SessionProvider>
+      <MasterDataProvider>
+        <Layout>
+          <strong>Home</strong>
+        </Layout>
+      </MasterDataProvider>
+    </SessionProvider>
   );
 }
 

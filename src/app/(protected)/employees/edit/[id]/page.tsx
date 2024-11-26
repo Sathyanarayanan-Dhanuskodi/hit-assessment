@@ -1,9 +1,11 @@
 'use client';
 
-import { ROLES } from '@/constants/constants';
-import Utils from '@/utils/utils';
-import { useParams, useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import Utils from '@/utils/utils';
+import Roles from '@/components/Roles';
+import { TRole } from '@/types/users';
+import Loader from '@/components/Loader';
 
 function EditUser() {
   const router = useRouter();
@@ -12,11 +14,11 @@ function EditUser() {
   const [user, setUser] = useState<{
     username: string;
     password: string;
-    role: number;
+    roles: number[];
   }>({
     username: '',
     password: '',
-    role: 1
+    roles: []
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -25,13 +27,13 @@ function EditUser() {
     async function fetchUser() {
       try {
         const response = await Utils.callRestAPI({
-          url: `/api/users/${id}`
+          url: `/api/employees/${id}`
         });
 
         setUser({
           username: response.data.username,
           password: '', // Don't set password for security
-          role: response.data.roleId
+          roles: response.data.roles?.map((e: TRole) => e.id)
         });
       } catch {
         setError('Failed to fetch user details');
@@ -47,17 +49,22 @@ function EditUser() {
     setIsLoading(true);
 
     try {
+      const payload: { [key: string]: unknown } = {
+        username: user.username,
+        roles: user.roles
+      };
+
+      if (user.password) {
+        payload['password'] = user.password;
+      }
+
       await Utils.callRestAPI({
-        url: `/api/users/${id}`,
+        url: `/api/employees/${id}`,
         method: 'PUT',
-        data: {
-          username: user.username,
-          ...(user.password && { password: user.password }), // Only include password if it's changed
-          roleId: user.role
-        }
+        data: payload
       });
 
-      router.push('/users');
+      router.push('/employees');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.log('Error updating user', err);
@@ -67,12 +74,12 @@ function EditUser() {
     }
   }
 
-  return (
+  return !isLoading ? (
     <>
       <strong>Edit user</strong>
       <div className="flex justify-center w-full">
         <form className="min-w-[400px] mt-8 space-y-4">
-          <label className="text-gray-800 text-sm mb-2 block">Username</label>
+          <p className="text-gray-800 text-sm mb-2 block">Username</p>
           <div className="relative flex items-center">
             <input
               name="username"
@@ -85,7 +92,7 @@ function EditUser() {
             />
           </div>
 
-          <label className="text-gray-800 text-sm mb-2 block">Password</label>
+          <p className="text-gray-800 text-sm mb-2 block">Password</p>
           <div className="relative flex items-center">
             <input
               name="password"
@@ -96,18 +103,20 @@ function EditUser() {
             />
           </div>
 
-          <label className="text-gray-800 text-sm mb-2 block">Role</label>
-          <div className="relative flex items-center">
-            <select
-              value={user.role}
-              onChange={(e) =>
-                setUser({ ...user, role: parseInt(e.target.value) })
-              }>
-              <option value={ROLES.ADMIN}>Admin</option>
-              <option value={ROLES.EDITOR}>Editor</option>
-              <option value={ROLES.VIEWER}>Viewer</option>
-            </select>
-          </div>
+          <p className="text-gray-800 text-sm mb-2 block">Roles</p>
+          <Roles
+            selectedRoles={user.roles}
+            onChange={(e) =>
+              setUser({
+                ...user,
+                roles: e.target.checked
+                  ? [...user.roles, parseInt(e.target.value)]
+                  : user.roles.filter(
+                      (role) => role !== parseInt(e.target.value)
+                    )
+              })
+            }
+          />
 
           <p className="text-red-500 text-sm">{error}</p>
 
@@ -129,6 +138,8 @@ function EditUser() {
         </form>
       </div>
     </>
+  ) : (
+    <Loader />
   );
 }
 

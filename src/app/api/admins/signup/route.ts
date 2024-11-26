@@ -6,14 +6,34 @@ import {
   ACCESS_TOKEN_EXPIRATION,
   ACCESS_TOKEN_KEY
 } from '@/constants/constants';
+import { ERoles } from '@/types/types';
 
 export async function POST(request: Request) {
   try {
-    const { username, password, roleId } = await request.json();
+    const { username, password } = await request.json();
 
-    if (!username || !password || !roleId) {
+    if (!username || !password) {
       return Response.json(
         { success: false, message: 'Enter all the fields' },
+        { status: 400 }
+      );
+    }
+
+    if (!/^[a-z]+$/.test(username)) {
+      return Response.json(
+        {
+          success: false,
+          message: 'Username must contain only lowercase letters'
+        },
+        { status: 400 }
+      );
+    }
+
+    const passwordCheck = Utils.isStrongPassword(password);
+
+    if (!passwordCheck.isValid) {
+      return Response.json(
+        { success: false, message: passwordCheck.message },
         { status: 400 }
       );
     }
@@ -37,11 +57,15 @@ export async function POST(request: Request) {
       data: {
         username,
         password: hashedPassword,
-        roleId
+        roles: {
+          connect: {
+            id: ERoles.ADMIN
+          }
+        }
       }
     });
 
-    const token = await Utils.jwtSign({ uid: user.id, rid: user.roleId });
+    const token = await Utils.jwtSign({ uid: user.id, rid: [ERoles.ADMIN] });
 
     const cookieStore = await cookies();
 

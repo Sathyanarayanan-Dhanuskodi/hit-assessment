@@ -6,7 +6,9 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 const SessionContext = createContext<IUser | undefined>(undefined);
 
-export function SessionProvider({ children }: { children: React.ReactNode }) {
+export function SessionProvider({
+  children
+}: Readonly<{ children: React.ReactNode }>) {
   const [currentUser, setCurrentUser] = useState<IUser>();
 
   useEffect(() => {

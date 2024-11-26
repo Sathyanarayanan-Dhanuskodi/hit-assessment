@@ -29,7 +29,9 @@ export default function Signin() {
         }
       });
 
-      router.push('/users');
+      setTimeout(() => {
+        router.push('/');
+      }, 1000);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {

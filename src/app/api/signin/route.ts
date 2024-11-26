@@ -21,6 +21,16 @@ export async function POST(request: Request) {
     const user = await prisma.user.findUnique({
       where: {
         username
+      },
+      select: {
+        id: true,
+        username: true,
+        password: true,
+        roles: {
+          select: {
+            id: true
+          }
+        }
       }
     });
 
@@ -40,7 +50,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const token = await Utils.jwtSign({ uid: user.id, rid: user.roleId });
+    const token = await Utils.jwtSign({
+      uid: user.id,
+      rid: user.roles.map((e) => e.id)
+    });
 
     const cookieStore = await cookies();
 

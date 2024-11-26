@@ -9,6 +9,17 @@ export async function GET(
   const user = await prisma.user.findUnique({
     where: {
       id: parseInt(id)
+    },
+    select: {
+      id: true,
+      username: true,
+      roles: {
+        select: {
+          id: true,
+          code: true,
+          name: true
+        }
+      }
     }
   });
 
@@ -24,11 +35,18 @@ export async function PUT(
 ) {
   const id = (await params).id;
 
-  const { username, password, roleId } = await req.json();
+  const { username, password, roles } = await req.json();
 
-  if (!username || !roleId) {
+  if (!username || !roles) {
     return Response.json(
       { success: false, message: 'Enter all the fields' },
+      { status: 400 }
+    );
+  }
+
+  if (roles.length === 0) {
+    return Response.json(
+      { success: false, message: 'Select at least one role' },
       { status: 400 }
     );
   }
@@ -36,6 +54,15 @@ export async function PUT(
   const user = await prisma.user.findUnique({
     where: {
       id: parseInt(id)
+    },
+    select: {
+      id: true,
+      username: true,
+      roles: {
+        select: {
+          id: true
+        }
+      }
     }
   });
 
@@ -46,18 +73,25 @@ export async function PUT(
     );
   }
 
-  const body: { [key: string]: string | number } = { username, role: roleId };
+  const body: { [key: string]: string | number } = { username };
 
   if (password) body['password'] = password;
+
+  const rolesToConnect = roles.map((role: number) => ({ id: role }));
+  const rolesToDisconnect = user.roles
+    .filter((role) => !roles.includes(role.id))
+    .map((r) => ({ id: r.id }));
 
   await prisma.user.update({
     where: {
       id: parseInt(id)
     },
     data: {
-      username,
-      password,
-      roleId
+      ...body,
+      roles: {
+        connect: rolesToConnect,
+        disconnect: rolesToDisconnect
+      }
     }
   });
 

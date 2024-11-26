@@ -1,9 +1,28 @@
 import Image from 'next/image';
 
+// Admin
+// Employee management
+// RBAC management
+// Finance Management
+
+// HR Manager
+// Employee Edit
+
+// Finace Manage
+// Finace Management
+
+// HR
+// Employee - (View)
+
+// Sathya - Admin
+// Gopi - HR Manager
+// Venkat - Finace manager
+// Senhthil - HR Manager, Finance Manager
+
 export const NAV_LINKS = [
   {
-    title: 'Users',
-    link: '/users',
+    title: 'Employees',
+    link: '/employees',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -18,8 +37,21 @@ export const NAV_LINKS = [
     )
   },
   {
-    title: 'Employees',
-    link: '/employees',
+    title: 'Finance management',
+    link: '/finance',
+    icon: (
+      <Image
+        src="/assets/employee.png"
+        width={18}
+        height={18}
+        alt="Employees"
+        className="mr-4"
+      />
+    )
+  },
+  {
+    title: 'Access management',
+    link: '/access',
     icon: (
       <Image
         src="/assets/employee.png"
