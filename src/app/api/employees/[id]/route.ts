@@ -35,7 +35,7 @@ export async function PUT(
 ) {
   const id = (await params).id;
 
-  const { username, password, roles } = await req.json();
+  const { username, roles } = await req.json();
 
   if (!username || !roles) {
     return Response.json(

@@ -16,6 +16,7 @@ function Input({
   name: string;
   required?: boolean;
   placeholder?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value?: any;
   defaultChecked?: boolean;
   disabled?: boolean;
