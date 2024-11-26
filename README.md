@@ -27,11 +27,4 @@
 - Run `npm run build` to build the project
 - Run `npm run start`
 
-npm run start
-├── components/ # Reusable UI components
-├── pages/ # Next.js pages and API routes
-├── public/ # Static assets
-├── styles/ # Global styles and CSS modules
-├── types/ # TypeScript type definitions
-├── utils/ # Helper functions and utilities
-└── README.md # Project documentation
+## Application details and access
