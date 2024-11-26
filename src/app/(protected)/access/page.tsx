@@ -99,10 +99,7 @@ function Access() {
                                 moduleId: m.id,
                                 permissionId: p.id
                               })}
-                              disabled={
-                                r.id === ERoles.ADMIN ||
-                                p.name.toLowerCase() === EPermissions.READ
-                              }
+                              disabled={r.id === ERoles.ADMIN}
                               onChange={(e) =>
                                 updatePermissions({
                                   checked: e.target.checked,
